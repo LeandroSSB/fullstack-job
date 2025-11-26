@@ -41,7 +41,7 @@ A definição de quais dados destacar fica a seu critério.
 O backend deve ser implementado em **Python com [FastAPI](https://fastapi.tiangolo.com/)**.
 
 > A API Open-Meteo não exige autenticação.  
-> Consulte a documentação oficial e utilize conforme seu entendimento:  
+> Consulte a documentação oficial e utilize conforme seu entendimento:
 > <https://open-meteo.com>/
 
 ---
@@ -58,12 +58,14 @@ O frontend deve ser feito com **Next.js (web)** ou **React Native (Expo - mobile
 
 ## Deploy
 
-- Utilize **docker-compose** para subir frontend e backend e permitir a comunicação entre eles.
+- No caso da aplicação web, utilize **docker-compose** para subir frontend e backend e permitir a comunicação entre eles.
 - A aplicação deve funcionar com um único comando:
 
 ```bash
 docker compose up
 ```
+
+- Para interfaces mobile, adicione as instruções de como acessar a aplicação no README do projeto
 
 ## Estrutura sugerida do projeto
 
