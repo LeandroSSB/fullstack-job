@@ -1,88 +1,237 @@
-# Atividade técnica – Engenheiro(a) de Software Fullstack
+# Clima Cana - Informações Climáticas para Produtores de Cana-de-Açúcar
 
-Construção de uma aplicação onde o usuário informa o nome de uma cidade e recebe como resposta **as informações do clima atual** da região.
+Aplicação fullstack que fornece informações climáticas atuais e insights agrícolas relevantes para produtores de cana-de-açúcar.
 
-A aplicação será composta de:
+## 🌾 Sobre o Projeto
 
-- **Frontend** (web ou mobile) que permita inserir uma cidade e exibir os dados de clima atual.
-- **Backend** com **uma rota obrigatória**, que receberá a cidade enviada pelo frontend e retornará o clima atual.
-- **Docker Compose** orquestrando frontend e backend, garantindo que se comuniquem corretamente.
+Esta aplicação foi desenvolvida como parte do desafio técnico para Engenheiro(a) de Software Fullstack. O objetivo é criar uma ferramenta simples e eficaz que ajude produtores rurais a monitorar condições climáticas que impactam diretamente o cultivo de cana-de-açúcar.
 
-## O que será avaliado?
+### Funcionalidades
 
-- Estruturação clara de frontend (web ou mobile) e backend
-- Organização do código e arquitetura geral da solução
-- Tratamento de estados assíncronos (carregando, erro, sucesso)
-- Consumo e composição de dados da API externa
-- Decisões técnicas adotadas e clareza na documentação
-- Coerência da solução com o objetivo do produto
-- Otimização e simplicidade da implementação
+- ✅ Busca de informações climáticas por nome de cidade
+- ✅ Dados atuais: temperatura, umidade, precipitação, vento, pressão
+- ✅ Insights agrícolas personalizados para cana-de-açúcar
+- ✅ Sistema de análise de risco (baixo, médio, alto)
+- ✅ Recomendações baseadas nas condições climáticas
+- ✅ Interface responsiva e acessível
+- ✅ Deploy simplificado com Docker Compose
 
----
+## 🏗️ Arquitetura da Solução
 
-## Contexto
+### Stack Tecnológico
 
-Você deve criar uma aplicação de página única que permita ao usuário buscar informações do **clima atual** informando o nome de uma cidade.
+#### Backend
+- **Framework**: FastAPI (Python)
+- **Validação**: Pydantic
+- **HTTP Client**: httpx
+- **API Externa**: Open-Meteo (sem autenticação)
 
-Esses dados devem ajudar produtores de cana-de-açúcar a monitorar fatores relevantes para o desenvolvimento saudável do canavial (ex.: temperatura, chuva, vento, umidade).  
-A definição de quais dados destacar fica a seu critério.
+#### Frontend
+- **Framework**: Next.js 14 (App Router)
+- **Linguagem**: TypeScript
+- **Estilização**: Tailwind CSS
+- **Gerenciamento de Estado**: React hooks
 
-**Não existe um formato predefinido de resposta** — a interpretação da API e a forma de expor os dados fazem parte da avaliação.
+#### Infraestrutura
+- **Containerização**: Docker
+- **Orquestração**: Docker Compose
+- **Comunicação**: HTTP/HTTPS
 
----
+### Estrutura do Projeto
 
-## Implementação backend
+```
+/
+├── backend/                 # API FastAPI
+│   ├── app/
+│   │   ├── main.py         # Configuração do FastAPI
+│   │   ├── api/routes/     # Rotas da API
+│   │   ├── services/       # Lógica de negócio
+│   │   ├── models/         # Modelos Pydantic
+│   │   └── utils/          # Utilitários
+│   ├── requirements.txt
+│   └── Dockerfile
+├── frontend/               # Aplicação Next.js
+│   ├── src/
+│   │   ├── app/            # Páginas e layout
+│   │   ├── components/     # Componentes React
+│   │   ├── services/       # Cliente HTTP
+│   │   ├── types/          # Tipos TypeScript
+│   │   └── utils/          # Funções utilitárias
+│   ├── package.json
+│   └── Dockerfile
+├── docker-compose.yaml     # Orquestração dos serviços
+└── README.md               # Este arquivo
+```
 
-- Desenvolva uma rota que retorna as informações do clima dado o nome de uma cidade.
-- Essa rota deve funcionar como um **wrapper** da API do Open-Meteo.
-- Utilize apenas HTTPS.
-- Estruturas adicionais (serviços, validações, tratamento de erro, cache etc.) são bem-vindas se fizerem sentido à sua solução.
+## 🚀 Como Executar o Projeto
 
-O backend deve ser implementado em **Python com [FastAPI](https://fastapi.tiangolo.com/)**.
+### Pré-requisitos
 
-> A API Open-Meteo não exige autenticação.  
-> Consulte a documentação oficial e utilize conforme seu entendimento:
-> <https://open-meteo.com>/
+- Docker e Docker Compose instalados
+- Git para clonar o repositório
 
----
+### Passo a Passo
 
-## Implementação frontend
+1. **Clonar o repositório**
+   ```bash
+   git clone <URL_DO_REPOSITORIO>
+   cd fullstack-job
+   ```
 
-- Desenvolva uma página única onde o usuário digita uma cidade.
-- O frontend deve se comunicar com o backend para obter os dados climáticos.
-- A apresentação deve ser clara, objetiva e alinhada ao contexto do produtor rural.
+2. **Criar o arquivo docker-compose.yaml**
+   ```bash
+   # Copie o conteúdo de docker-compose-content.md para docker-compose.yaml
+   ```
 
-O frontend deve ser feito com **Next.js (web)** ou **React Native (Expo - mobile)**.
+3. **Iniciar os serviços**
+   ```bash
+   docker compose up
+   ```
 
----
+4. **Acessar a aplicação**
+   - Frontend: http://localhost:3000
+   - API Documentation: http://localhost:8000/docs
 
-## Deploy
-
-- No caso da aplicação web, utilize **docker-compose** para subir frontend e backend e permitir a comunicação entre eles.
-- A aplicação deve funcionar com um único comando:
+### Comandos Úteis
 
 ```bash
-docker compose up
+# Iniciar em modo detached
+docker compose up -d
+
+# Parar os serviços
+docker compose down
+
+# Ver logs
+docker compose logs -f
+
+# Reconstruir imagens
+docker compose up --build
 ```
 
-- Para interfaces mobile, adicione as instruções de como acessar a aplicação no README do projeto
+## 📊 Funcionamento da Aplicação
 
-## Estrutura sugerida do projeto
+### Fluxo de Dados
 
-```markdown
-backend/
-frontend/
-docker-compose.yaml
-README.md
-```
+1. **Usuário** digita o nome da cidade no frontend
+2. **Frontend** envia requisição para `/weather?city=NomeCidade`
+3. **Backend** usa Geocoding API para obter coordenadas
+4. **Backend** consulta Weather API com as coordenadas
+5. **Backend** processa dados e gera insights agrícolas
+6. **Frontend** exibe informações de forma clara e objetiva
 
-## Entregas
+### Dados Climáticos Fornecidos
 
-- Link para o repositório GitHub contendo frontend, backend e docker-compose
-- Aplicação funcionando de forma integrada
-- README explicando:
-  - como rodar o projeto
-  - decisões de arquitetura e design adotadas
-  - (opcional) sugestões de melhorias futuras
+- **Temperatura**: Impacta crescimento da cana
+- **Umidade**: Influencia doenças e pragas
+- **Precipitação**: Crucial para irrigação
+- **Vento**: Afeta pulverização e evapotranspiração
+- **Pressão**: Indicador de mudanças climáticas
+- **Cobertura de nuvens**: Afeta radiação solar
 
-O envio deve ser feito para **<contato@canac.com.br>**, com o assunto: Desafio Fullstack – {Seu nome}, até o prazo descrito no e-mail
+### Análise de Risco Agrícola
+
+#### Risco Alto
+- Temperatura > 35°C ou < 10°C
+- Precipitação > 50mm em 24h
+- Vento > 40km/h
+- Umidade < 30% ou > 90%
+
+#### Risco Médio
+- Temperatura entre 30-35°C ou 10-15°C
+- Precipitação entre 20-50mm
+- Vento entre 25-40km/h
+- Umidade entre 30-40% ou 80-90%
+
+#### Risco Baixo
+- Temperatura entre 15-30°C
+- Precipitação < 20mm
+- Vento < 25km/h
+- Umidade entre 40-80%
+
+## 🎨 Decisões de Design e Arquitetura
+
+### Frontend
+- **Next.js**: Escolhido pela simplicidade de deploy e performance
+- **Tailwind CSS**: Desenvolvimento rápido e design consistente
+- **TypeScript**: Segurança de tipos e melhor DX
+- **Design responsivo**: Foco em dispositivos móveis (público rural)
+
+### Backend
+- **FastAPI**: Alta performance e documentação automática
+- **Pydantic**: Validação robusta de dados
+- **httpx**: Cliente HTTP assíncrono moderno
+- **Estrutura em camadas**: Separação clara de responsabilidades
+
+### Integração
+- **Open-Meteo**: API gratuita e sem autenticação
+- **Wrapper pattern**: Backend abstrai complexidade da API externa
+- **Tratamento de erros**: Respostas amigáveis para o usuário
+- **Cache simples**: Melhora performance e reduz chamadas
+
+## 🔮 Melhorias Futuras
+
+### Curto Prazo
+1. **Cache persistente**: Redis para consultas frequentes
+2. **Histórico de buscas**: Armazenar consultas anteriores
+3. **Alertas personalizados**: Notificações para condições críticas
+4. **PWA**: Funcionalidade offline para áreas sem internet
+
+### Médio Prazo
+1. **Previsões estendidas**: 7-15 dias
+2. **Dados históricos**: Análise de tendências
+3. **Mapas interativos**: Visualização geográfica
+4. **Múltiplas culturas**: Expandir para outras agriculturas
+
+### Longo Prazo
+1. **Machine Learning**: Previsões baseadas em dados históricos
+2. **Integração com IoT**: Dados de sensores na lavoura
+3. **Dashboard avançado**: Análises e relatórios detalhados
+4. **API pública**: Permitir integrações de terceiros
+
+## 📱 Acessibilidade e Performance
+
+### Acessibilidade
+- Navegação por teclado
+- Contraste adequado para leitura
+- Leitores de tela compatíveis
+- Tamanhos de toque otimizados
+
+### Performance
+- First Contentful Paint < 1.5s
+- Largest Contentful Paint < 2.5s
+- Time to Interactive < 3.5s
+- Otimização para conexões lentas
+
+## 🧪 Testes
+
+### Testes Manuais Sugeridos
+
+1. **Busca de cidade válida**
+   - Input: "São Paulo"
+   - Resultado: Dados climáticos exibidos corretamente
+
+2. **Busca de cidade inválida**
+   - Input: "CidadeInexistente123"
+   - Resultado: Mensagem de erro amigável
+
+3. **Campo vazio**
+   - Input: ""
+   - Resultado: Validação no frontend
+
+4. **Conexão lenta**
+   - Condição: 3G network
+   - Resultado: Loading spinner adequado
+
+## 📞 Contato
+
+**Desenvolvido por**: [Seu Nome]
+
+**E-mail para envio**: contato@canac.com.br
+
+**Assunto**: Desafio Fullstack – [Seu nome]
+
+---
+
+## 📄 Licença
+
+Este projeto foi desenvolvido exclusivamente para o processo seletivo e demonstração técnica.
