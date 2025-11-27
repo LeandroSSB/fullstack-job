@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 interface WeatherSearchProps {
   onSearch: (city: string) => void;
@@ -6,7 +7,16 @@ interface WeatherSearchProps {
 }
 
 export default function WeatherSearch({ onSearch, isLoading = false }: WeatherSearchProps) {
+  const searchParams = useSearchParams();
   const [city, setCity] = useState('');
+
+  // Sincronizar o input com o query parameter da URL
+  useEffect(() => {
+    const cityFromUrl = searchParams.get('city');
+    if (cityFromUrl) {
+      setCity(cityFromUrl);
+    }
+  }, [searchParams]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

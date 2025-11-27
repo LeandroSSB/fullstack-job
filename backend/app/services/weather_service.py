@@ -7,14 +7,17 @@ from ..utils.exceptions import (
     WeatherDataUnavailableException,
     ExternalAPIException
 )
+from ..utils.cache import cached
+from ..config import settings
 
 
 class WeatherService:
     def __init__(self):
         self.geocoding_url = "https://geocoding-api.open-meteo.com/v1/search"
         self.weather_url = "https://api.open-meteo.com/v1/forecast"
-        self.timeout = 10.0
+        self.timeout = settings.request_timeout
 
+    @cached(ttl=None, key_prefix="geocoding")
     async def get_coordinates(self, city_name: str) -> Location:
         """Obtém coordenadas da cidade usando a API de geocodificação"""
         params = {
@@ -46,6 +49,7 @@ class WeatherService:
                 raise
             raise ExternalAPIException(f"Erro ao buscar coordenadas: {str(e)}")
 
+    @cached(ttl=None, key_prefix="weather")
     async def get_weather_data(self, location: Location) -> dict:
         """Obtém dados climáticos atuais usando a API Open-Meteo"""
         params = {

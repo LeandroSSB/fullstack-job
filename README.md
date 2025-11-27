@@ -26,6 +26,19 @@ Esta aplicação foi desenvolvida como parte do desafio técnico para Engenheiro
 - **HTTP Client**: httpx
 - **API Externa**: Open-Meteo (sem autenticação)
 
+### Entradas do Cache
+Cada entrada contém:
+- Dados serializados
+- Timestamp de criação
+- Timestamp de expiração
+
+### TTLs Padrão
+
+- **Geocodificação**: 24 horas (dados mudam raramente)
+- **Clima**: 5 minutos (dados mudam frequentemente)
+- **Padrão**: 5 minutos para outras funções
+
+
 #### Frontend
 - **Framework**: Next.js 14 (App Router)
 - **Linguagem**: TypeScript

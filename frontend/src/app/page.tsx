@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { WeatherResponse, WeatherStatus } from '../types/weather';
 import { apiService } from '../services/api';
 import WeatherSearch from '../components/WeatherSearch';
@@ -8,10 +9,20 @@ import WeatherCard from '../components/WeatherCard';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
 
-export default function Home() {
+function HomeContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [weatherData, setWeatherData] = useState<WeatherResponse | null>(null);
   const [status, setStatus] = useState<WeatherStatus>('idle');
   const [error, setError] = useState<string | null>(null);
+
+  // Carregar dados da cidade se estiver na URL
+  useEffect(() => {
+    const cityFromUrl = searchParams.get('city');
+    if (cityFromUrl) {
+      handleSearch(cityFromUrl);
+    }
+  }, [searchParams]);
 
   const handleSearch = async (city: string) => {
     setStatus('loading');
@@ -22,6 +33,11 @@ export default function Home() {
       const data = await apiService.getWeatherByCity(city);
       setWeatherData(data);
       setStatus('success');
+      
+      // Atualizar URL com a cidade pesquisada
+      const params = new URLSearchParams(searchParams);
+      params.set('city', city);
+      router.push(`/?${params.toString()}`);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Erro desconhecido';
       setError(errorMessage);
@@ -111,9 +127,18 @@ export default function Home() {
     }
   };
 
+
   return (
     <div className="min-h-screen">
       {renderContent()}
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={<LoadingSpinner size="large" message="Carregando..." />}>
+      <HomeContent />
+    </Suspense>
   );
 }
